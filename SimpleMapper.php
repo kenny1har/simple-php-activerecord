@@ -12,7 +12,7 @@ class SimpleMapper {
 		}
 		static::$params = array();
 		foreach (get_class_vars(get_called_class()) as $key => $value)
-			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk', 'saved')))
+			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk')))
 				static::$params[$key] = $value;
 	}
 	public static function get($id) {
