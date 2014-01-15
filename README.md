@@ -2,6 +2,9 @@ Simple Mapper
 =============
 Simple mapper using PHP PDO. Simple, low memory and fast for those who wants high performance ORM / Active Record.
 
+The returned object for where(), query(), execute() is PDOStatement, which is standard for usage.
+http://sg2.php.net/manual/en/class.pdostatement.php
+
 Usage :
 ```
 <?php
