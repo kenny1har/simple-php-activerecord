@@ -1,7 +1,6 @@
-Simpe Mapper for PHP using PDO
+Simpe Mapper
 =============
-
-Simple data mapper using PHP PDO
+Simple mapper using PHP PDO. Simple, low memory and fast for those who wants high performance.
 
 Usage :
 ```
