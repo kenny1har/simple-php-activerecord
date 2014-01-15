@@ -10,7 +10,7 @@ SimpleMapper\SimpleMapper::$pdo = new \PDO('mysql:host=localhost;dbname=admin_te
 
 class Product extends SimpleMapper\SimpleMapper {
 	public static $table = 'product';
-	public static $pk = 'id'; /* optional */
+	public static $pk = 'id'; /* optional row, default to 'id' */
 	public $id;
 	public $name;
 	public $price;
@@ -22,7 +22,7 @@ Product::initialize();
 
 class Category extends SimpleMapper\SimpleMapper {
 	public static $table = 'category';
-	public static $pk = 'id'; /* optional */
+	public static $pk = 'id'; /* optional row, default to 'id' */
 	public $id;
 	public $name;
 	public $price;
