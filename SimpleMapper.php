@@ -12,7 +12,7 @@ class SimpleMapper {
 		}
 		static::$params = array();
 		foreach (get_class_vars(get_called_class()) as $key => $value)
-			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk')))
+			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk', 'saved')))
 				static::$params[$key] = $value;
 	}
 	public static function get($id) {
@@ -35,8 +35,7 @@ class SimpleMapper {
 	public function save() {
 		$tempParams = static::$params;
 
-		$pk = static::$pk;
-		if (!isset($this->$pk))
+		if (!isset($this->{static::$pk}))
 			unset($tempParams[static::$pk]);
 
 		$sets = '';
@@ -47,8 +46,8 @@ class SimpleMapper {
 		}
 		$sets = substr($sets, 0, -2);
 
-		if (isset($this->$pk)) {
-			$sql = "UPDATE ".static::$table." SET $sets WHERE $pk = :".$pk."_value";
+		if (isset($this->{static::$pk})) {
+			$sql = "UPDATE ".static::$table." SET $sets WHERE $pk = :".static::$pk."_value";
 			static::execute($sql, $paramsTemp);
 		} else {
 			$fields = implode(', ', array_keys($tempParams));
@@ -59,8 +58,7 @@ class SimpleMapper {
 		}
 	}
 	public function delete() {
-		$pk = static::$pk;
-		return static::execute('DELETE FROM '.static::$table.' WHERE '.static::$pk.' = :id', array('id'=>$this->$pk));
+		return static::execute('DELETE FROM '.static::$table.' WHERE '.static::$pk.' = :id', array('id'=>$this->{static::$pk}));
 	}
 }
 ?>
