@@ -58,5 +58,9 @@ class SimpleMapper {
 			$this->{static::$pk} = self::$pdo->lastInsertId();
 		}
 	}
+	public function delete() {
+		$pk = static::$pk;
+		return static::execute('DELETE FROM '.static::$table.' WHERE '.static::$pk.' = :id', array('id'=>$this->$pk));
+	}
 }
 ?>
