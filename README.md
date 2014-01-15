@@ -1,6 +1,6 @@
 Simpe Mapper
 =============
-Simple mapper using PHP PDO. Simple, low memory and fast for those who wants high performance.
+Simple mapper using PHP PDO. Simple, low memory and fast for those who wants high performance ORM.
 
 Usage :
 ```
