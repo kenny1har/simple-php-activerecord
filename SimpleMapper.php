@@ -1,6 +1,7 @@
 <?php
 namespace SimpleMapper;
 class SimpleMapper {
+	public static $pk = 'id';
 	public static $columns = '*';
 	public static $pdo;
 	public static $params;
