@@ -1,0 +1,107 @@
+<?php
+namespace SimpleMapper;
+class SimpleMapper {
+	public static $columns = '*';
+	public static $pdo;
+	public static $params;
+
+	public static function initialize() {
+		if (!isset(static::$table)) {
+			static::$table = substr(get_called_class(), strrpos(get_called_class(), '\\')+1);
+		}
+		static::$params = array();
+		foreach (get_class_vars(get_called_class()) as $key => $value)
+			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk', 'saved')))
+				static::$params[$key] = $value;
+	}
+	public static function get($id) {
+		return static::query('SELECT '.static::$columns.' FROM '.static::$table.' WHERE '.static::$pk.' = :id', array('id'=>$id))->fetch();
+	}
+	public static function where($where, $params) {
+		return static::query('SELECT '.static::$columns.' FROM '.static::$table.' WHERE '.$where, $params);
+	}
+	public static function query($sql, $params) {
+		$query = self::$pdo->prepare($sql);
+		$query->setFetchMode(\PDO::FETCH_CLASS, get_called_class());
+		$query->execute($params);
+		return $query;
+	}
+	public static function execute($sql, $params) {
+		$query = self::$pdo->prepare($sql);
+		$query->execute($params);
+		return $query;
+	}
+	public function save() {
+		$tempParams = static::$params;
+
+		$pk = static::$pk;
+		if (!isset($this->$pk))
+			unset($tempParams[static::$pk]);
+
+		$sets = '';
+		$paramsTemp = array();
+		foreach ($tempParams as $key => $value) {
+			$paramsTemp[$key.'_value'] = $this->$key;
+			$sets .= $key.' = :'.$key.'_value, ';
+		}
+		$sets = substr($sets, 0, -2);
+
+		if (isset($this->$pk)) {
+			$sql = "UPDATE ".static::$table." SET $sets WHERE $pk = :".$pk."_value";
+			static::execute($sql, $paramsTemp);
+		} else {
+			$fields = implode(', ', array_keys($tempParams));
+			$values = ':'.implode('_value, :', array_keys($tempParams)).'_value';
+			$sql = "INSERT INTO ".static::$table." ($fields) VALUES ($values)";
+			static::execute($sql, $paramsTemp);
+			$this->{static::$pk} = self::$pdo->lastInsertId();
+		}
+	}
+}
+
+SimpleMapper::$pdo = new \PDO('mysql:host=localhost;dbname=admin_test', 'dbusername', 'dbpassword');
+class Product extends SimpleMapper {
+	public static $table = 'product';
+	public static $pk = 'id'; /* optional */
+	public $id;
+	public $name;
+	public $price;
+	public function output() {
+		echo 'Product: '.$this->id.' '.$this->name.' '.$this->price."<br />\n<br />\n";
+	}
+}
+Product::initialize();
+
+class Category extends SimpleMapper {
+	public static $table = 'category';
+	public static $pk = 'id'; /* optional */
+	public $id;
+	public $name;
+	public $price;
+	public function output() {
+		echo 'Category: '.$this->id.' '.$this->name.' '.$this->price."<br />\n<br />\n";
+	}
+}
+Category::initialize();
+
+$product = new Product();
+$product->name = 'test product';
+$product->price = rand(0,1000);
+$product->save();
+$product->output();
+
+$category = new Category();
+$category->name = 'new category';
+$category->price = rand(0,1000);
+$category->save();
+$category->output();
+
+$testProduct = Product::get($product->id);
+$testProduct->output();
+
+echo "\n\n<br /><br />Multi rows<br />\n";
+$testCategories = Category::where('id < :id_value LIMIT 0,5', array('id_value'=>$category->id));
+while ($tempCategory = $testCategories->fetch()) {
+	$tempCategory->output();
+}
+?>
