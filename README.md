@@ -2,3 +2,51 @@ simple-mapper
 =============
 
 Simple data mapper using PHP PDO
+
+```
+SimpleMapper::$pdo = new \PDO('mysql:host=localhost;dbname=admin_test', 'dbusername', 'dbpassword');
+class Product extends SimpleMapper {
+	public static $table = 'product';
+	public static $pk = 'id'; /* optional */
+	public $id;
+	public $name;
+	public $price;
+	public function output() {
+		echo 'Product: '.$this->id.' '.$this->name.' '.$this->price."<br />\n<br />\n";
+	}
+}
+Product::initialize();
+
+class Category extends SimpleMapper {
+	public static $table = 'category';
+	public static $pk = 'id'; /* optional */
+	public $id;
+	public $name;
+	public $price;
+	public function output() {
+		echo 'Category: '.$this->id.' '.$this->name.' '.$this->price."<br />\n<br />\n";
+	}
+}
+Category::initialize();
+
+$product = new Product();
+$product->name = 'test product';
+$product->price = rand(0,1000);
+$product->save();
+$product->output();
+
+$category = new Category();
+$category->name = 'new category';
+$category->price = rand(0,1000);
+$category->save();
+$category->output();
+
+$testProduct = Product::get($product->id);
+$testProduct->output();
+
+echo "\n\n<br /><br />Multi rows<br />\n";
+$testCategories = Category::where('id < :id_value LIMIT 0,5', array('id_value'=>$category->id));
+while ($tempCategory = $testCategories->fetch()) {
+	$tempCategory->output();
+}
+```
