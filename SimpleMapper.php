@@ -7,9 +7,8 @@ class SimpleMapper {
 	public static $params;
 
 	public static function initialize() {
-		if (!isset(static::$table)) {
+		if (!isset(static::$table))
 			static::$table = substr(get_called_class(), strrpos(get_called_class(), '\\')+1);
-		}
 		static::$params = array();
 		foreach (get_class_vars(get_called_class()) as $key => $value)
 			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk')))
@@ -34,10 +33,8 @@ class SimpleMapper {
 	}
 	public function save() {
 		$tempParams = static::$params;
-
 		if (!isset($this->{static::$pk}))
 			unset($tempParams[static::$pk]);
-
 		$sets = '';
 		$paramsTemp = array();
 		foreach ($tempParams as $key => $value) {
@@ -45,7 +42,6 @@ class SimpleMapper {
 			$sets .= $key.' = :'.$key.'_value, ';
 		}
 		$sets = substr($sets, 0, -2);
-
 		if (isset($this->{static::$pk})) {
 			$sql = "UPDATE ".static::$table." SET $sets WHERE $pk = :".static::$pk."_value";
 			static::execute($sql, $paramsTemp);
