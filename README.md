@@ -3,9 +3,13 @@ simple-mapper
 
 Simple data mapper using PHP PDO
 
+Usage :
 ```
-SimpleMapper::$pdo = new \PDO('mysql:host=localhost;dbname=admin_test', 'dbusername', 'dbpassword');
-class Product extends SimpleMapper {
+<?php
+include('SimpleMapper.php');
+SimpleMapper\SimpleMapper::$pdo = new \PDO('mysql:host=localhost;dbname=admin_test', 'dbusername', 'dbpassword');
+
+class Product extends SimpleMapper\SimpleMapper {
 	public static $table = 'product';
 	public static $pk = 'id'; /* optional */
 	public $id;
@@ -17,7 +21,7 @@ class Product extends SimpleMapper {
 }
 Product::initialize();
 
-class Category extends SimpleMapper {
+class Category extends SimpleMapper\SimpleMapper {
 	public static $table = 'category';
 	public static $pk = 'id'; /* optional */
 	public $id;
@@ -49,4 +53,5 @@ $testCategories = Category::where('id < :id_value LIMIT 0,5', array('id_value'=>
 while ($tempCategory = $testCategories->fetch()) {
 	$tempCategory->output();
 }
+?>
 ```
