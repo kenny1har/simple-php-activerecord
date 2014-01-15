@@ -33,6 +33,11 @@ class Category extends SimpleMapper\SimpleMapper {
 Category::initialize();
 
 $product = new Product();
+$product->name = 'test insert';
+$product->price = rand(0,1000);
+$product->save();
+
+$product = new Product();
 $product->name = 'test product';
 $product->price = rand(0,1000);
 $product->save();
@@ -46,6 +51,7 @@ $category->output();
 
 $testProduct = Product::get($product->id);
 $testProduct->output();
+$testProduct->delete();
 
 echo "\n\n<br /><br />Multi rows<br />\n";
 $testCategories = Category::where('id < :id_value LIMIT 0,5', array('id_value'=>$category->id));
