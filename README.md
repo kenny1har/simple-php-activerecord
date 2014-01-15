@@ -1,4 +1,4 @@
-simple-mapper
+Simpe Mapper for PHP using PDO
 =============
 
 Simple data mapper using PHP PDO
