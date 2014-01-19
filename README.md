@@ -10,7 +10,7 @@ query($sql) is almost the same as execute($sql), except query($sql) will map the
 The returned object for where(), query(), execute() is PDOStatement, please refer to the PHP help page :
 http://sg2.php.net/manual/en/class.pdostatement.php
 
-Benchmark result :
+Benchmark result : (MyPDO)
 ```
 | Library                          | Insert | findPk | complex| hydrate|  with  | memory usage |  time  |
 | --------------------------------:| ------:| ------:| ------:| ------:| ------:| ------------:| ------:|
