@@ -2,7 +2,10 @@ Simple PHP Active Record
 =============
 PHP PDO active record. Simple, low memory and fast for those who wants high performance ORM / Active Record.
 
-JOIN, GROUP BY, complex WHERE use the execute() function.
+No configuration file. There is no association, aggregation support. Please use the get($pk) function for the reference object.
+JOIN, GROUP BY, complex WHERE, please use the execute($sql) function.
+
+query($sql) is almost the same as execute($sql), except query($sql) will map the result to the object while the execute($sql) will return PDOStatement object.
 
 The returned object for where(), query(), execute() is PDOStatement, please refer to the PHP help page :
 http://sg2.php.net/manual/en/class.pdostatement.php
