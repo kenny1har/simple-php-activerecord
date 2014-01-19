@@ -10,6 +10,27 @@ query($sql) is almost the same as execute($sql), except query($sql) will map the
 The returned object for where(), query(), execute() is PDOStatement, please refer to the PHP help page :
 http://sg2.php.net/manual/en/class.pdostatement.php
 
+Benchmark result :
+```
+| Library                          | Insert | findPk | complex| hydrate|  with  | memory usage |  time  |
+| --------------------------------:| ------:| ------:| ------:| ------:| ------:| ------------:| ------:|
+                             MyPDO |    228 |    139 |   1129 |    517 |    648 |      756,736 |   2.67 |
+                               PDO |    135 |    132 |    945 |    418 |    463 |      777,768 |   2.10 |
+                          Propel16 |    392 |    182 |   1407 |    904 |   1001 |   19,136,512 |   3.91 |
+                 Propel16WithCache |    220 |    121 |   1311 |    797 |    840 |   19,136,512 |   3.30 |
+                          Propel17 |    312 |    181 |   1371 |    931 |   1001 |   18,874,368 |   3.81 |
+                 Propel17WithCache |    218 |    121 |   1179 |    750 |    738 |   18,874,368 |   3.02 |
+                          Propel20 |    356 |    209 |   1485 |   1052 |   1103 |   23,592,960 |   4.22 |
+                 Propel20WithCache |    239 |    135 |   1349 |    910 |    920 |   18,612,224 |   3.56 |
+            Propel20FormatOnDemand |    238 |    135 |   1362 |    865 |    927 |    6,815,744 |   3.54 |
+                        Doctrine24 |    566 |    479 |   2369 |   2137 |   2390 |   20,185,088 |   8.00 |
+               Doctrine24WithCache |    559 |    477 |   1278 |   1530 |   1251 |   20,447,232 |   5.15 |
+            Doctrine24ArrayHydrate |    582 |    481 |   1292 |    872 |    911 |   17,301,504 |   4.20 |
+           Doctrine24ScalarHydrate |    563 |    479 |   1292 |    746 |    805 |   17,301,504 |   3.94 |
+          Doctrine24WithoutProxies |    563 |    478 |   1277 |   1187 |   1540 |   18,874,368 |   5.10 |
+```
+
+
 Usage :
 ```
 <?php
@@ -70,26 +91,6 @@ while ($tempCategory = $testCategories->fetch()) {
     $tempCategory->output();
 }
 ?>
-```
-
-Benchmark result :
-```
-| Library                          | Insert | findPk | complex| hydrate|  with  | memory usage |  time  |
-| --------------------------------:| ------:| ------:| ------:| ------:| ------:| ------------:| ------:|
-                             MyPDO |    228 |    139 |   1129 |    517 |    648 |      756,736 |   2.67 |
-                               PDO |    135 |    132 |    945 |    418 |    463 |      777,768 |   2.10 |
-                          Propel16 |    392 |    182 |   1407 |    904 |   1001 |   19,136,512 |   3.91 |
-                 Propel16WithCache |    220 |    121 |   1311 |    797 |    840 |   19,136,512 |   3.30 |
-                          Propel17 |    312 |    181 |   1371 |    931 |   1001 |   18,874,368 |   3.81 |
-                 Propel17WithCache |    218 |    121 |   1179 |    750 |    738 |   18,874,368 |   3.02 |
-                          Propel20 |    356 |    209 |   1485 |   1052 |   1103 |   23,592,960 |   4.22 |
-                 Propel20WithCache |    239 |    135 |   1349 |    910 |    920 |   18,612,224 |   3.56 |
-            Propel20FormatOnDemand |    238 |    135 |   1362 |    865 |    927 |    6,815,744 |   3.54 |
-                        Doctrine24 |    566 |    479 |   2369 |   2137 |   2390 |   20,185,088 |   8.00 |
-               Doctrine24WithCache |    559 |    477 |   1278 |   1530 |   1251 |   20,447,232 |   5.15 |
-            Doctrine24ArrayHydrate |    582 |    481 |   1292 |    872 |    911 |   17,301,504 |   4.20 |
-           Doctrine24ScalarHydrate |    563 |    479 |   1292 |    746 |    805 |   17,301,504 |   3.94 |
-          Doctrine24WithoutProxies |    563 |    478 |   1277 |   1187 |   1540 |   18,874,368 |   5.10 |
 ```
 
 Benchmark script :
