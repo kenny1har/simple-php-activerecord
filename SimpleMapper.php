@@ -9,10 +9,10 @@ class SimpleMapper {
 	public static function initialize() {
 		if (!isset(static::$table))
 			static::$table = substr(get_called_class(), strrpos(get_called_class(), '\\')+1);
-		static::$params = array();
+		self::$params[static::$table] = array();
 		foreach (get_class_vars(get_called_class()) as $key => $value)
 			if (!in_array($key, array('pdo', 'params', 'table', 'columns', 'pk')))
-				static::$params[$key] = $value;
+				self::$params[static::$table][$key] = $value;
 	}
 	public static function get($id) {
 		return static::query('SELECT '.static::$columns.' FROM '.static::$table.' WHERE '.static::$pk.' = :id', array('id'=>$id))->fetch();
@@ -32,7 +32,7 @@ class SimpleMapper {
 		return $query;
 	}
 	public function save() {
-		$tempParams = static::$params;
+		$tempParams = self::$params[static::$table];
 		if (!isset($this->{static::$pk}))
 			unset($tempParams[static::$pk]);
 		$sets = '';
