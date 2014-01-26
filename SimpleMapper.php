@@ -43,7 +43,7 @@ class SimpleMapper {
 		}
 		$sets = substr($sets, 0, -2);
 		if (isset($this->{static::$pk})) {
-			$sql = "UPDATE ".static::$table." SET $sets WHERE $pk = :".static::$pk."_value";
+			$sql = "UPDATE ".static::$table." SET $sets WHERE ".static::$pk." = :".static::$pk."_value";
 			static::execute($sql, $paramsTemp);
 		} else {
 			$fields = implode(', ', array_keys($tempParams));
